@@ -26,6 +26,8 @@ PLUGINS = ['latex', 'liquid_tags.notebook']
 
 MD_EXTENSIONS = ['codehilite(css_class=highlight)', 'extra', 'mathjax']
 
+ARTICLE_EXCLUDES = ['pages', 'notebooks']
+
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None

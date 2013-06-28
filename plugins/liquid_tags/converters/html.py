@@ -196,7 +196,6 @@ class ConverterHTML(Converter):
     def _img_lines(self, img_file):
         path = os.path.relpath(img_file, self.output_path).split(os.path.sep)
         path = '/' + '/'.join(path)
-        print(path)
         return ['<img src="%s">' % path, '</img>']
 
     def _unknown_lines(self, data):
