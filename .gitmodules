@@ -1,3 +1,0 @@
-[submodule "content/notebooks"]
-	path = content/notebooks
-	url = https://github.com/znah/notebooks.git
