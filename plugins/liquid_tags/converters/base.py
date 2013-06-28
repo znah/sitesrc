@@ -143,7 +143,10 @@ class Converter(Configurable):
     raw_as_verbatim = False
 
 
-    def __init__(self, infile='', config=None, exclude=[], cellslice=None, **kw):
+    def __init__(self, infile='', config=None, exclude=[], 
+        cellslice=None,
+        output_path = None, **kw):
+        
         super(Converter,self).__init__(config=config)
 
         #DocStringInheritor.__init__(self=config)
@@ -155,11 +158,16 @@ class Converter(Configurable):
         self.infile_dir, infile_root = os.path.split(infile)
         self.infile_root = os.path.splitext(infile_root)[0]
         self.clean_name = clean_filename(self.infile_root)
+
+        if output_path is None:
+            output_path = self.infile_dir
+        self.output_path = output_path
+
         # Handle the creation of a directory for ancillary files, for
         # formats that need one.
-        files_dir = os.path.join(self.infile_dir, self.clean_name + '_files')
+        files_dir = os.path.join(output_path, "images", self.clean_name)
         if not os.path.isdir(files_dir):
-            os.mkdir(files_dir)
+            os.makedirs(files_dir)
         self.files_dir = files_dir
         self.outbase = os.path.join(self.infile_dir, self.infile_root)
 

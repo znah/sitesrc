@@ -12,6 +12,8 @@ SITESUBTITLE = u'Teaching computers to see'
 
 TIMEZONE = 'Europe/Paris'
 
+#DELETE_OUTPUT_DIRECTORY = True
+
 DEFAULT_LANG = u'en'
 
 MARKUP = ('rst', 'md', 'html')

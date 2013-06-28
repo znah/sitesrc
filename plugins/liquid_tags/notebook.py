@@ -56,60 +56,6 @@ FORMAT = re.compile(r"""^(\s+)?(?P<src>\S+)(\s+)?((cells\[)(?P<start>-?[0-9]*):(
 
 
 
-def process_body(body):
-    body = '\n'.join(body)
-
-    # replace the highlight tags
-    body = body.replace('highlight', 'highlight-ipynb')
-
-    # specify <pre> tags
-    body = body.replace('<pre', '<pre class="ipynb"')
-
-    # create a special div for notebook
-    body = '<div class="ipynb">\n\n' + body + "\n\n</div>"
-
-    # specialize headers
-    for h in '123456':
-        body = body.replace('<h%s' % h, '<h%s class="ipynb"' % h)
-    
-    return body.split('\n')
-
-
-def process_header(header):
-    header = '\n'.join(header)
-
-    # replace the highlight tags
-    header = header.replace('highlight', 'highlight-ipynb')
-
-    # specify pre tags
-    header = header.replace('html, body', '\n'.join(('pre.ipynb {',
-                                                     '  color: black;',
-                                                     '  background: #f7f7f7;',
-                                                     '  border: 0;',
-                                                     '  box-shadow: none;',
-                                                     '  margin-bottom: 0;',
-                                                     '  padding: 0;'
-                                                     '}\n',
-                                                     'html, body')))
-
-
-    # create a special div for notebook
-    R = re.compile(r'^body ?{', re.MULTILINE)
-    header = R.sub('div.ipynb {', header)
-
-    # specify all headers
-    R = re.compile(r'^(h[1-6])', re.MULTILINE)
-    repl = lambda match: '.ipynb ' + match.groups()[0]
-    header = R.sub(repl, header)
-
-    # substitude ipynb class for html and body modifiers
-    header = header.replace('html, body', '.ipynb div,')
-
-    return header.split('\n')
-
-
-
-
 @LiquidTags.register('notebook')
 def notebook(preprocessor, tag, markup):
     match = FORMAT.search(markup)
@@ -141,22 +87,14 @@ def notebook(preprocessor, tag, markup):
 
     # Call the notebook converter
 
-    converter = ConverterHTML(infile=nb_path, cellslice=slice(start, end))
+    converter = ConverterHTML(infile=nb_path, 
+        cellslice=slice(start, end), 
+        output_path = settings.get('OUTPUT_PATH'))
     converter.markdown_ext = ['codehilite(css_class=highlight)', 'extra', 'mathjax']
     converter.read()
 
-    #header_lines = process_header(converter.header_body())
-    #body_lines = process_body(converter.main_body('\n'))
     body_lines = converter.main_body('\n')
-    
-    #if not notebook.header_saved:
-    #    notebook.header_saved = True
-    #    print ("\n *** Writing styles to _nb_header.html: "
-    #           "this should be included in the theme.\n")
-    #    lines = '\n'.join(header_lines).encode('utf-8')
-    #    open('_nb_header.html', 'w').write(lines)
-
-    #body_lines = strip_divs(body_lines, start, end)
+   
 
     body = preprocessor.configs.htmlStash.store('\n'.join(body_lines),
                                                 safe=True)

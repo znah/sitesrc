@@ -194,7 +194,10 @@ class ConverterHTML(Converter):
         return self._ansi_colored('\n'.join(output.traceback))
 
     def _img_lines(self, img_file):
-        return ['<img src="%s">' % img_file, '</img>']
+        path = os.path.relpath(img_file, self.output_path).split(os.path.sep)
+        path = '/' + '/'.join(path)
+        print(path)
+        return ['<img src="%s">' % path, '</img>']
 
     def _unknown_lines(self, data):
         return ['<h2>Warning:: Unknown cell</h2>'] + self.in_tag('pre', data)
