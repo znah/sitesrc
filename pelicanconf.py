@@ -22,11 +22,13 @@ MARKUP = ('rst', 'md', 'html')
 THEME = 'themes/notmyidea'
 
 PLUGIN_PATH = 'plugins'
-PLUGINS = ['latex', 'liquid_tags.notebook']
+PLUGINS = ['liquid_tags.notebook'] # 'latex'
+
+NOTEBOOK_DIR = '../notebooks'
 
 MD_EXTENSIONS = ['codehilite(css_class=highlight)', 'extra', 'mathjax']
 
-ARTICLE_EXCLUDES = ['pages', 'notebooks']
+ARTICLE_EXCLUDES = ['pages']
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
