@@ -1,1 +1,1 @@
-pelican -s pelicanconf.py ./content/
+pelican -s publishconf.py ./content/
